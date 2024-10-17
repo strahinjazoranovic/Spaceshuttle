@@ -1,13 +1,9 @@
 body {
     margin: 0px;
     background-color: black;
-    
+
 }
 
-html{
-    background-color: black;
-    
-}
 
 #h1 {
     color: #00FFFF;
@@ -82,31 +78,34 @@ html{
     border: 4px solid #00FFFF;
     border-radius: 20px;
     font-family: monospace;
-    cursor:pointer;
+    cursor: pointer;
     font-size: 40px;
     padding: 10px;
 }
 
-a{
+a {
     text-decoration: none;
 }
 
-#title{
+#title {
     display: flex;
     justify-content: center;
-    color: orange;
-    text-align: center;
-    font-size: 80px;
-    font-family: monospace;
-    margin-top: -15px;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-    border: 4px solid #00FFFF;
-    width: 600px;
-    margin-left: 460px;
-    margin-right: 460px;
+
 }
 
-    html {
-        height: 400px;
-    }
+html {
+    height: 400px;
+}
+
+#h4 {
+    color: orange;
+    text-align: center;
+    font-family: monospace;
+    border: 4px solid #00FFFF;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    margin-top: -15px;
+    font-size: 80px;
+    padding: 10px;
+    
+}
