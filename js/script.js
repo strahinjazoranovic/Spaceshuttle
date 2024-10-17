@@ -61,7 +61,7 @@ class Player {
         this.rotation
 
         const image = new Image()
-        image.src = './img/spaceship.jpg'
+        image.src = './img/spaceship1.jpg'
         image.onload = () => {
             const scale = 0.15
             this.image = image
