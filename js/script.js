@@ -1,3 +1,4 @@
+
 // Functie om de naam op te slaan in localStorage en de gebruiker naar inlog1.html te sturen
 function saveName() {
     var name = document.getElementById('name').value;
@@ -139,8 +140,55 @@ class Projectile {
     }
 }
 
+class Invader {
+    constructor() {
+        this.velocity = {
+            x: 0,
+            y: 0
+        }
+
+
+        const image = new Image()
+        image.src = './img/invader1.jpg'
+        image.onload = () => {
+            const scale = 0.30
+            this.image = image
+            this.width = image.width * scale
+            this.height = image.height * scale
+            this.position = {
+                x: canvas.width / 2 - this.width / 2,
+                y: canvas.height / 2,
+            }
+        }
+    }
+
+    draw() {
+
+
+        if (this.image) {
+            c.drawImage(
+                this.image,
+                this.position.x,
+                this.position.y,
+                this.width,
+                this.height
+            )
+        }
+    }
+
+    update() {
+        if (this.image) {
+            this.draw()
+            this.position.x += this.velocity.x
+            this.position.y += this.velocity.y
+        }
+    }
+}
+
+
 const player = new Player()
 const projectiles = []
+const invader = new Invader()
 const keys = {
     a: {
         pressed: false
@@ -156,9 +204,16 @@ const keys = {
 function animate() {
     requestAnimationFrame(animate)
     c.clearRect(0, 0, canvas.width, canvas.height)
+    invader.update()
     player.update()
-    projectiles.forEach(projectile => {
-        projectile.update()
+    projectiles.forEach((projectile, index) => {
+        if (projectile.position.y + projectile.radius <= 0){
+            setTimeout(() =>  {
+                projectiles.splice(index, 1)
+        }, 0)
+        } else {
+            projectile.update()
+        } 
     })
 
     if (keys.a.pressed && player.position.x >= 0) { // zodat spaceshuttle niet weggaat uit scherm als je a inhoudt
