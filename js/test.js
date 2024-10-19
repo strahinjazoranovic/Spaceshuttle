@@ -141,7 +141,7 @@ class Projectile {
 }
 
 class Invader {
-    constructor({position}) {
+    constructor({ position }) {
         this.velocity = {
             x: 0,
             y: 0
@@ -151,13 +151,13 @@ class Invader {
         const image = new Image()
         image.src = './img/invader1.jpg'
         image.onload = () => {
-            const scale = 0.30
+            const scale = 0.18
             this.image = image
             this.width = image.width * scale
             this.height = image.height * scale
             this.position = {
                 x: position.x,
-                y: position.x,
+                y: position.x
             }
         }
     }
@@ -197,28 +197,32 @@ class Grid {
             y: 0
         }
 
-        this.invaders = []
+        this.invaders = [new Invader()]
+
+        const rows = Math.floor(Math.random() * 5)
+        const cols = 0
 
         for (let i = 0; i < 10; i++) {
             this.invaders.push(new Invader({
                 position: {
-                x: i *30,
-                y: 0
+                    x: i * 40,
+                    y: i * 20
                 }
-            }))
-
+            })
+            )
         }
         console.log(this.invaders)
     }
-    update() {}
 
 }
 
 
 
+
+
 const player = new Player()
 const projectiles = []
-const girds = [new Grid()]
+const grids = [new Grid()]
 const keys = {
     a: {
         pressed: false
@@ -234,7 +238,6 @@ const keys = {
 function animate() {
     requestAnimationFrame(animate)
     c.clearRect(0, 0, canvas.width, canvas.height)
-
     player.update()
     projectiles.forEach((projectile, index) => {
         if (projectile.position.y + projectile.radius <= 0) {
@@ -246,7 +249,7 @@ function animate() {
         }
     })
 
-    girds.forEach(grid => {
+    grids.forEach(grid => {
         grid.update()
         grid.invaders.forEach(invader => {
             invader.update()
@@ -325,8 +328,8 @@ capsLockWarning.style.top = '10px';
 capsLockWarning.style.right = '10px';
 capsLockWarning.style.padding = '10px';
 capsLockWarning.style.backgroundColor = '#00FFFF';
-capsLockWarning.style.color = 
-capsLockWarning.style.color = 'white';
+capsLockWarning.style.color =
+    capsLockWarning.style.color = 'white';
 capsLockWarning.style.display = 'none';  // Hidden by default
 document.body.appendChild(capsLockWarning);
 
