@@ -44,6 +44,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 setTimeout(() => {
     const sometext = document.getElementById('hello');
+
+    sometext.style.display = 'none';
+
 }, 5500);
 
 const canvas = document.querySelector('canvas')
@@ -138,7 +141,7 @@ class Projectile {
 }
 
 class Invader {
-    constructor({ position }) {
+    constructor({position}) {
         this.velocity = {
             x: 0,
             y: 0
@@ -182,9 +185,40 @@ class Invader {
     }
 }
 
+class Grid {
+    constructor() {
+        this.position = {
+            x: 0,
+            y: 0
+        }
+
+        this.velocity = {
+            x: 0,
+            y: 0
+        }
+
+        this.invaders = []
+
+        for (let i = 0; i < 10; i++) {
+            this.invaders.push(new Invader({
+                position: {
+                x: i *30,
+                y: 0
+                }
+            }))
+
+        }
+        console.log(this.invaders)
+    }
+    update() {}
+
+}
+
+
 
 const player = new Player()
 const projectiles = []
+const girds = [new Grid()]
 const keys = {
     a: {
         pressed: false
@@ -210,6 +244,13 @@ function animate() {
         } else {
             projectile.update()
         }
+    })
+
+    girds.forEach(grid => {
+        grid.update()
+        grid.invaders.forEach(invader => {
+            invader.update()
+        })
     })
     if (keys.a.pressed && player.position.x >= 0) { // zodat spaceshuttle niet weggaat uit scherm als je a inhoudt
         player.velocity.x = -5
@@ -284,8 +325,8 @@ capsLockWarning.style.top = '10px';
 capsLockWarning.style.right = '10px';
 capsLockWarning.style.padding = '10px';
 capsLockWarning.style.backgroundColor = '#00FFFF';
-capsLockWarning.style.color =
-    capsLockWarning.style.color = 'white';
+capsLockWarning.style.color = 
+capsLockWarning.style.color = 'white';
 capsLockWarning.style.display = 'none';  // Hidden by default
 document.body.appendChild(capsLockWarning);
 

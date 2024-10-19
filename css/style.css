@@ -4,7 +4,7 @@ body {
 
 }
 
-html {
+html{
     background-color: black;
 }
 
@@ -112,19 +112,19 @@ html {
     font-size: 80px;
     padding: 10px;
     margin-bottom: 10px;
-
+    
 }
 
 #h5 {
     color: orange;
     text-align: center;
     font-family: monospace;
-    border: 4px solid #00FFFF;
+    border: 4px solid grey;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
     margin-top: -15px;
-    font-size: 20px;
+    font-size: 30px;
     padding: 8px;
     margin-bottom: 0px;
-
+     
 }
