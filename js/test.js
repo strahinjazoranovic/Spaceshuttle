@@ -154,7 +154,7 @@ class Invader {
             this.height = image.height * scale
             this.position = {
                 x: position.x,
-                y: position.y
+                y: position.x
             }
         }
     }
@@ -196,19 +196,18 @@ class Grid {
 
         this.invaders = [new Invader()]
 
-        const rows = Math.floor(Math.random() * 5 + 2) // Number of rows
-        const cols = Math.floor(Math.random() * 10 + 5) // Number of columns
+        const rows = Math.floor(Math.random() * 5)
+        const cols = 0
 
-        for (let row = 0; row < rows; row++) {
-        for (let col = 0; col < cols; col++) {
-        this.invaders.push(new Invader({
-            position: {
-                x: col * 40,
-                y: row * 40
-            }
-        }))
-    }
-}
+        for (let i = 0; i < 10; i++) {
+            this.invaders.push(new Invader({
+                position: {
+                    x: i * 40,
+                    y: i * 20
+                }
+            })
+            )
+        }
         console.log(this.invaders)
     }
 
