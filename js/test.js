@@ -138,7 +138,7 @@ class Projectile {
 }
 
 class Invader {
-    constructor({ position }) {
+    constructor({position }) {
         this.velocity = {
             x: 0,
             y: 0
