@@ -154,7 +154,7 @@ class Invader {
             this.height = image.height * scale
             this.position = {
                 x: position.x,
-                y: position.x
+                y: position.y
             }
         }
     }
