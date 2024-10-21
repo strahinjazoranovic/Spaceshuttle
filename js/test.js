@@ -113,20 +113,18 @@ class Player {
     }
 }
 
-
-
 class Projectile {
     constructor({ position, velocity }) {
         this.position = position
         this.velocity = velocity
 
-        this.radius = 4
+        this.radius = 3
     }
 
     draw() {
         c.beginPath()
         c.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
-        c.fillStyle = 'blue'
+        c.fillStyle = 'red'
         c.fill()
         c.closePath()
 
@@ -140,7 +138,7 @@ class Projectile {
 }
 
 class Invader {
-    constructor({ position }) {
+    constructor({position }) {
         this.velocity = {
             x: 0,
             y: 0
@@ -148,9 +146,9 @@ class Invader {
 
 
         const image = new Image()
-        image.src = './img/invader6.jpg'
+        image.src = './img/invader3.jpg'
         image.onload = () => {
-            const scale = 0.22
+            const scale = 0.18
             this.image = image
             this.width = image.width * scale
             this.height = image.height * scale
@@ -162,6 +160,8 @@ class Invader {
     }
 
     draw() {
+
+
         if (this.image) {
             c.drawImage(
                 this.image,
@@ -173,11 +173,11 @@ class Invader {
         }
     }
 
-    update({ velocity }) {
+    update() {
         if (this.image) {
             this.draw()
-            this.position.x += velocity.x
-            this.position.y += velocity.y
+            this.position.x += this.velocity.x
+            this.position.y += this.velocity.y
         }
     }
 }
@@ -190,45 +190,32 @@ class Grid {
         }
 
         this.velocity = {
-            x: 2,
+            x: 0,
             y: 0
         }
 
+        this.invaders = [new Invader()]
 
+        const rows = Math.floor(Math.random() * 5 + 2) // Number of rows
+        const cols = Math.floor(Math.random() * 10 + 5) // Number of columns
 
-        this.invaders = []
-
-        const columns = Math.floor(Math.random() * 10 + 1)
-        const rows = Math.floor(Math.random() * 5 + 1)
-
-        this.width = columns * 60
-
-        for (let x = 0; x < columns; x++) {
-            for (let y = 0; y < rows; y++) {
-                this.invaders.push(
-                    new Invader({
-                        position: {
-                            x: x * 55,
-                            y: y * 40
-                        }
-                    })
-                )
+        for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+        this.invaders.push(new Invader({
+            position: {
+                x: col * 40,
+                y: row * 40
             }
-        }
-    }
-
-    update() {
-        this.position.x += this.velocity.x
-        this.position.y += this.velocity.y
-
-        this.velocity.y = 0
-
-        if (this.position.x + this.width >= canvas.width || this.position.x <= 0) {
-            this.velocity.x = -this.velocity.x
-            this.velocity.y = 30
-        }
+        }))
     }
 }
+        console.log(this.invaders)
+    }
+
+}
+
+
+
 
 
 const player = new Player()
@@ -246,14 +233,9 @@ const keys = {
     }
 }
 
-let frames = 0
-let randomInterval = Math.floor(Math.random() * 500) + 500
-
-
 function animate() {
     requestAnimationFrame(animate)
     c.clearRect(0, 0, canvas.width, canvas.height)
-
     player.update()
     projectiles.forEach((projectile, index) => {
         if (projectile.position.y + projectile.radius <= 0) {
@@ -265,7 +247,7 @@ function animate() {
         }
     })
 
-    grids.forEach((grid, gridIndex) => {
+    grids.forEach(grid => {
         grid.update()
         grid.invaders.forEach((invader, i) => {
             invader.update({ velocity: grid.velocity })
@@ -298,27 +280,16 @@ function animate() {
     })
 
     if (keys.a.pressed && player.position.x >= 0) { // zodat spaceshuttle niet weggaat uit scherm als je a inhoudt
-        player.velocity.x = -3
-        player.rotation = -0.12
+        player.velocity.x = -5
+        player.rotation = -0.15
     } else if (keys.d.pressed && player.position.x + player.width <= canvas.width) {  // zodat spaceshuttle niet weggaat uit scherm als je d inhoudt
-        player.velocity.x = 3
-        player.rotation = 0.12
+        player.velocity.x = 5
+        player.rotation = 0.15
     } else {
         player.velocity.x = 0
         player.rotation = 0
     }
-
-    // spawning enemies
-    if (frames % randomInterval === 0) {
-        grids.push(new Grid())
-        randomInterval = Math.floor(Math.random() * 500 + 500)
-        frames = 0
-        console.log(randomInterval)
-    }
-
-    frames++
 }
-
 
 animate()
 
