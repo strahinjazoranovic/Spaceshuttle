@@ -61,7 +61,7 @@ class Player {
         const image = new Image()
         image.src = './img/spaceshuttle.png'
         image.onload = () => {
-            const scale = 0.15
+            const scale = 0.10
             this.image = image
             this.width = image.width * scale
             this.height = image.height * scale
@@ -182,6 +182,7 @@ class Invader {
     }
 }
 
+
 class Grid {
     constructor() {
         this.position = {
@@ -256,57 +257,45 @@ function animate() {
             projectile.update()
         }
     })
-
-    grids.forEach((grid, gridIndex) => {
+    for (let gridIndex = grids.length - 1; gridIndex >= 0; gridIndex--) {
+        const grid = grids[gridIndex];
         grid.update();
-        grid.invaders.forEach((invader, i) => {
+        
+        for (let i = grid.invaders.length - 1; i >= 0; i--) {
+            const invader = grid.invaders[i];
             invader.update({ velocity: grid.velocity });
-
-            projectiles.forEach((projectile, j) => {
+    
+            for (let j = projectiles.length - 1; j >= 0; j--) {
+                const projectile = projectiles[j];
+    
                 // Collision detection between projectile and invader
-                if (projectile.position.y - projectile.radius <=
-                    invader.position.y + invader.height &&
-                    projectile.position.x + projectile.radius >=
-                    invader.position.x &&
-                    projectile.position.x - projectile.radius <=
-                    invader.position.x + invader.width &&
-                    projectile.position.y + projectile.radius >=
-                    invader.position.y
+                if (
+                    projectile.position.y - projectile.radius <= invader.position.y + invader.height &&
+                    projectile.position.x + projectile.radius >= invader.position.x &&
+                    projectile.position.x - projectile.radius <= invader.position.x + invader.width &&
+                    projectile.position.y + projectile.radius >= invader.position.y
                 ) {
-
-                    setTimeout(() => {
-                        const invaderFound = grid.invaders.find((invader2) =>
-                            invader2 === invader
-                        )
-
-                        const projectileFound = projectiles.find(
-                            projectile2 => projectile2 === projectile
-                        )
-
-                        //remove invaders and projectile
-                        if (invaderFound && projectileFound) {
-                            grid.invaders.splice(i, 1)
-                            projectiles.invaders.splice(j, 1)
-
-                            if (grid.invaders.length > 0) {
-                                const firstInvader = grid.invaders[0]
-                                const lastInvader = grid.invaders[grid.invaders.length - 1]
-
-                                grid.width = 
-                                lastInvader.position.x - 
-                                firstInvader.position.x + 
-                                lastInvader.width
-                                grid.position.x = firstInvader.position.x
-                            } else {
-                                grids.splice(gridIndex, 1)
-                            }
-                        }
-                    }, 0)
+                    // Remove invader and projectile immediately (no setTimeout)
+                    grid.invaders.splice(i, 1);
+                    projectiles.splice(j, 1);
+    
+                    // Update grid properties or remove grid if empty
+                    if (grid.invaders.length > 0) {
+                        const firstInvader = grid.invaders[0];
+                        const lastInvader = grid.invaders[grid.invaders.length - 1];
+    
+                        grid.width =
+                            lastInvader.position.x -
+                            firstInvader.position.x +
+                            lastInvader.width;
+                        grid.position.x = firstInvader.position.x;
+                    } else {
+                        grids.splice(gridIndex, 1);
+                    }
                 }
             }
-            )
-        });
-    });
+        }
+    }
 
     if (keys.a.pressed && player.position.x >= 0) { // zodat spaceshuttle niet weggaat uit scherm als je a inhoudt
         player.velocity.x = -6
