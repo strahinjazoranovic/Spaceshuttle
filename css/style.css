@@ -9,6 +9,14 @@ html{
     
 }
 
+#audiotekst{
+    color: purple;
+    font-family: monospace;
+    font-size: 20px;
+    
+}
+
+
 #h1 {
     color: purple;
     text-align: center;
@@ -24,6 +32,7 @@ html{
 #inlog1 {
     display: flex;
     justify-content: center;
+    
 }
 
 
@@ -70,12 +79,18 @@ html{
     justify-content: space-around;
     margin: 50px;
 }
+#audio{
+    margin-top: 50px;
+    color: purple;
+    font-size: 16px;
+    font-family: monospace;
 
+}
 .knop1 {
     color: purple;
     background-color: black;
     border-radius: 5px;
-    width: 400px;
+    width: 275px;
     height: 200px;
     padding: 0px;
     border-color: white;

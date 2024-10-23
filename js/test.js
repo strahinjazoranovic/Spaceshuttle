@@ -138,12 +138,13 @@ class Projectile {
 }
 
 class Particle {
-    constructor({ position, velocity, radius, color }) {
+    constructor({ position, velocity, radius, color, fades}) {
         this.position = position
         this.velocity = velocity
         this.radius = radius
         this.color = color
         this.opacity = 1
+        this.fades = fades
     }
 
     draw() {
@@ -162,7 +163,8 @@ class Particle {
         this.draw()
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
-
+        
+        if (this.fades)
         this.opacity -= 0.01
     }
 }
@@ -315,6 +317,40 @@ const keys = {
 let frames = 0
 let randomInterval = Math.floor(Math.random() * 500 + 500)
 
+for (let i = 0; i <100; i++){
+    particles.push(new Particle({
+      position:   {
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+      },
+      
+      velocity: {
+          x: 0,
+          y: 1
+      },
+      radius: Math.random() * 2,
+      color: 'white'
+    }))
+}
+
+function createParticles({object, color}) {
+    for (let i = 0; i <15; i++){
+        particles.push(new Particle({
+          position:   {
+              x: object.position.x + object.width / 2,
+              y: object.position.y + object.height / 2
+          },
+          
+          velocity: {
+              x: (Math.random() -0.5)* 2,
+              y: (Math.random() -0.5)* 2
+          },
+          radius: Math.random() * 3,
+          color: color || 'purple'
+        }))
+      }
+}
+
 function animate() {
     requestAnimationFrame(animate)
     c.clearRect(0, 0, canvas.width, canvas.height)
@@ -346,6 +382,10 @@ function animate() {
             >= player.position.x &&
             invaderProjectile.position.x <= player.position.x + player.width) {
             console.log('you lose')
+            createParticles({
+                object: player,
+                color: 'white       '
+            })
         }
     })
 
@@ -394,21 +434,9 @@ function animate() {
 
                         // remove invader and projectile
                         if (invaderFound && projectileFound) {
-                            for (let i = 0; i <15; i++){
-                                particles.push(new Particle({
-                                  position:   {
-                                      x: invader.position.x + invader.width / 2,
-                                      y: invader.position.y + invader.height / 2
-                                  },
-                                  
-                                  velocity: {
-                                      x: (Math.random() -0.5)* 2,
-                                      y: (Math.random() -0.5)* 2
-                                  },
-                                  radius: Math.random() * 3,
-                                  color: 'purple'
-                                }))
-                              }
+                            createParticles({
+                                object: invader
+                            })
                             grid.invaders.splice(i, 1)
                             projectiles.splice(j, 1)
 

@@ -1,4 +1,3 @@
-
 // Functie om de naam op te slaan in localStorage en de gebruiker naar inlog1.html te sturen
 function saveName() {
     var name = document.getElementById('name').value;
