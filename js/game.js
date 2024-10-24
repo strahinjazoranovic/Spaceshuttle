@@ -77,7 +77,7 @@ class Projectile {
         this.position = position
         this.velocity = velocity
 
-        this.radius = 5
+        this.radius = 3
     }
 
     draw() {
@@ -166,7 +166,7 @@ class Invader {
             this.height = image.height * scale
             this.position = {
                 x: position.x,
-                y: position.y
+                y: position.x
             }
         }
     }
@@ -185,11 +185,11 @@ class Invader {
         }
     }
 
-    update({ velocity }) {
+    update() {
         if (this.image) {
             this.draw()
-            this.position.x += velocity.x
-            this.position.y += velocity.y
+            this.position.x += this.velocity.x
+            this.position.y += this.velocity.y
         }
     }
 
