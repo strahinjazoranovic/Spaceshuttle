@@ -1,53 +1,13 @@
-
-// Functie om de naam op te slaan in localStorage en de gebruiker naar inlog1.html te sturen
-function saveName() {
-    var name = document.getElementById('name').value;
-    if (name) {
-        localStorage.setItem('userName', name);
-        window.location.href = 'inlog1.html'; // Gaat naar de volgende pagina
-    }
-}
-
-// Wacht tot de DOM volledig is geladen
-document.addEventListener('DOMContentLoaded', function () {
-    var loginForm = document.getElementById('loginForm');
-
-    // Als het formulier op de inlog.html staat
-    if (loginForm) {
-        loginForm.addEventListener('submit', function (e) {
-            e.preventDefault(); // Voorkomt standaard submitgedrag
-            saveName(); // Slaat de naam op en navigeert naar de volgende pagina
-        });
-    }
-
-    // Als de gebruiker op de inlog1.html pagina is
-    var helloElement = document.getElementById('hello');
-    if (helloElement) {
-        // Verwijder "ACCESS GRANTED" na 2 seconden
-        setTimeout(function () {
-            var accessText = document.querySelector('.h2');
-            if (accessText) {
-                accessText.remove(); // Verwijder de 'ACCESS GRANTED' tekst
-            }
-        }, 2000);
-
-        // Functie om de naam weer te geven
-        function displayText() {
-            var name = localStorage.getItem('userName') || 'USER';
-            document.getElementById("hello").textContent = "WELCOME TO PROJECT EVE, " + name.toUpperCase();
-        }
-
-        // Roep de displayText functie aan na 2,5 seconden
-        setTimeout(displayText, 2500);
-    }
-});
-
-setTimeout(() => {
-    const sometext = document.getElementById('hello');
-}, 5500);
-
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
+const scoreEl = document.querySelector('#scoreEl')
+
+
+canvas.width = 1434
+canvas.height = 806
+
+
+
 
 class Player {
     constructor() {
@@ -57,6 +17,7 @@ class Player {
         }
 
         this.rotation
+        this.opacity = 1
 
         const image = new Image()
         image.src = './img/spaceshuttle.png'
@@ -75,6 +36,7 @@ class Player {
     draw() {
 
         c.save()
+        c.globalAlpha = this.opacity
         c.translate(
             player.position.x + player.width / 2,
             player.position.y + player.height / 2
@@ -164,8 +126,7 @@ class Particle {
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
         
-        if (this.fades)
-        this.opacity -= 0.01
+        if (this.fades) this.opacity -= 0.01
     }
 }
 
@@ -273,8 +234,8 @@ class Grid {
             for (let y = 0; y < rows; y++) {
                 this.invaders.push(new Invader({
                     position: {
-                        x: x * 110,
-                        y: y * 80
+                        x: x * 120,
+                        y: y * 90
                     }
                 }))
             }
@@ -316,8 +277,14 @@ const keys = {
 
 let frames = 0
 let randomInterval = Math.floor(Math.random() * 500 + 500)
+let game = {
+    over: false,
+    active: true
+}
 
-for (let i = 0; i <100; i++){
+let score = 0
+
+for (let i = 0; i <125; i++){
     particles.push(new Particle({
       position:   {
           x: Math.random() * canvas.width,
@@ -326,14 +293,14 @@ for (let i = 0; i <100; i++){
       
       velocity: {
           x: 0,
-          y: 1
+          y: 0.4
       },
       radius: Math.random() * 2,
       color: 'white'
     }))
 }
 
-function createParticles({object, color}) {
+function createParticles({object, color, fades}) {
     for (let i = 0; i <15; i++){
         particles.push(new Particle({
           position:   {
@@ -346,16 +313,23 @@ function createParticles({object, color}) {
               y: (Math.random() -0.5)* 2
           },
           radius: Math.random() * 3,
-          color: color || 'purple'
+          color: color || 'purple',
+          fades
         }))
       }
 }
 
 function animate() {
+    if (!game.active) return
     requestAnimationFrame(animate)
     c.clearRect(0, 0, canvas.width, canvas.height)
     player.update()
     particles.forEach((particle, i) => {
+
+        if (particle.position.y - particle.radius >= canvas.height){
+            particle.position.x = Math.random() * canvas.width
+            particle.position.y = -particle.radius
+        }
         if (particle.opacity<= 0){
             setTimeout(() => {
                 particles.splice(i, 1)
@@ -365,7 +339,7 @@ function animate() {
         }
     })
 
-    console.log(particles)
+
     invaderProjectiles.forEach((invaderProjectile, index) => {
         if (
             invaderProjectile.position.y + invaderProjectile.height >= canvas.height) {
@@ -381,10 +355,21 @@ function animate() {
             invaderProjectile.position.x + invaderProjectile.width
             >= player.position.x &&
             invaderProjectile.position.x <= player.position.x + player.width) {
+
             console.log('you lose')
+            setTimeout(() => {
+                invaderProjectiles.splice(index,1 )
+                player.opacity = 0
+                game.over = true
+            }, 0)
+
+            setTimeout(() => {
+                game.active = false
+            }, 1000)
             createParticles({
                 object: player,
-                color: 'white       '
+                color: 'white',
+                fades: true
             })
         }
     })
@@ -405,7 +390,7 @@ function animate() {
     grids.forEach((grid, gridIndex) => {
         grid.update()
         //spawning projectiles
-        if (frames % 100 === 0 && grid.invaders.length > 0) {
+        if (frames % 150 === 0 && grid.invaders.length > 0) {
             grid.invaders[Math.floor(Math.random() * grid.invaders.length)].shoot(invaderProjectiles)
         }
         grid.invaders.forEach((invader, i) => {
@@ -434,8 +419,12 @@ function animate() {
 
                         // remove invader and projectile
                         if (invaderFound && projectileFound) {
+                            score += 100
+                            console.log(score)
+                            scoreEl.innerHTML = score
                             createParticles({
-                                object: invader
+                                object: invader,
+                                fades: true
                             })
                             grid.invaders.splice(i, 1)
                             projectiles.splice(j, 1)
@@ -484,6 +473,7 @@ function animate() {
 animate()
 
 addEventListener('keydown', ({ key }) => {
+    if (game.over) return
     switch (key) {
         case 'a':
             keys.a.pressed = true
@@ -502,7 +492,6 @@ addEventListener('keydown', ({ key }) => {
                     y: -8
                 }
             }))
-            console.log(projectiles)
             break
     }
 })

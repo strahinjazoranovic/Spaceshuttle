@@ -9,17 +9,25 @@
         href="img/spaceshuttle.png"
         type="image/icon type">
     <link rel="stylesheet" href="css/style.css">
+
 </head>
 
-<body>
+<body>  
+    <p
+    style="position: fixed; z-index: 10; color: white; left: 10px; top: 10px; margin: 0; font-size: 20px; font-family: monospace;">
+    <span>Score:</span><span id="scoreEl">0</span>
+    </p>
+    
     <div id="title">
         <h1 id="h5"><a href="inlog1.html">PROJECT EVE</a></h1>
     </div>
-    <canvas width="1530px" height="770px"></canvas>
+
+    <div id="canvas">
+    <canvas></canvas>
+    </div>
     
     
     
 </body>
-<script src="js/script.js"></script>
-
+<script src="js/beta.js"></script>
 </html>
