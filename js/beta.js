@@ -1,7 +1,7 @@
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 const scoreEl = document.querySelector('#scoreEl')
-const muziek = new Audio('sounds/audio2.mp3')
+const muziek = new Audio('sounds/audio1.mp3')
 
 canvas.width = 1434
 canvas.height = 806
