@@ -1,7 +1,7 @@
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 const scoreEl = document.querySelector('#scoreEl')
-
+const muziek = new Audio('sounds/audio2.mp3')
 
 canvas.width = 1434
 canvas.height = 806
@@ -205,7 +205,7 @@ class Invader {
                 },
                 velocity: {
                     x: 0,
-                    y: 3
+                    y: 2
                 }
             })
         )
@@ -221,7 +221,7 @@ class Grid {
         }
 
         this.velocity = {
-            x: 4,
+            x: 2,
             y: 0
         }
 
@@ -322,6 +322,7 @@ function createParticles({object, color, fades}) {
 function animate() {
     if (!game.active) return
     requestAnimationFrame(animate)
+    muziek.play();
     c.clearRect(0, 0, canvas.width, canvas.height)
     player.update()
     particles.forEach((particle, i) => {
@@ -390,7 +391,7 @@ function animate() {
     grids.forEach((grid, gridIndex) => {
         grid.update()
         //spawning projectiles
-        if (frames % 150 === 0 && grid.invaders.length > 0) {
+        if (frames % 200 === 0 && grid.invaders.length > 0) {
             grid.invaders[Math.floor(Math.random() * grid.invaders.length)].shoot(invaderProjectiles)
         }
         grid.invaders.forEach((invader, i) => {
@@ -448,10 +449,10 @@ function animate() {
     })
 
     if (keys.a.pressed && player.position.x >= 0) { // zodat spaceshuttle niet weggaat uit scherm als je a inhoudt
-        player.velocity.x = -6
+        player.velocity.x = -5
         player.rotation = -0.20
     } else if (keys.d.pressed && player.position.x + player.width <= canvas.width) {  // zodat spaceshuttle niet weggaat uit scherm als je d inhoudt
-        player.velocity.x = 6
+        player.velocity.x = 5
         player.rotation = 0.20
     } else {
         player.velocity.x = 0
